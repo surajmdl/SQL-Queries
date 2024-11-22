@@ -1,0 +1,23 @@
+----------------------------Finding 2nd highest Salary from Employee Table
+Method 1:   
+Select Max(Salary) from Employee where Salary < (Select Max(Salary) from Employee)
+
+Method 2:
+ WITH RESULT AS
+  (
+      SELECT DENSE_RANK() OVER (ORDER BY SALARY DESC) AS DENSERANK, SALARY
+      FROM EMPLOYEES
+  )
+  SELECT TOP 1 SALARY
+  FROM RESULT
+  WHERE DENSERANK = 2
+
+
+
+--------------------------------Delete duplicate rows from table
+WITH tblTemp as
+(
+   SELECT ROW_NUMBER() Over(PARTITION BY Name, Department ORDER BY Name)
+   AS RowNumber, * FROM emp
+)
+DELETE FROM tblTemp where RowNumber >1
